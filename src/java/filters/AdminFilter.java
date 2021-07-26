@@ -33,12 +33,19 @@ public class AdminFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest)request;
         HttpSession session = httpRequest.getSession();
         String email = (String)session.getAttribute("email");
-        User user = new User();
-        UserDB getUser = new UserDB();
-        user = getUser.get(email);
+
+        if(email == null){
+            HttpServletResponse httpResponse = (HttpServletResponse)response;
+            httpResponse.sendRedirect("login");
+            return;
+        }
         
+        User user = new User();
+            UserDB getUser = new UserDB();
+            user = getUser.get(email);
         
         if(user.getRole().getRoleId() == 2){
+            
             HttpServletResponse httpResponse = (HttpServletResponse)response;
             httpResponse.sendRedirect("notes");
             return;
