@@ -1,6 +1,11 @@
-
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package filters;
 
+import dataaccess.UserDB;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
@@ -14,21 +19,28 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import services.AccountService;
+import models.User;
 
-
-public class AuthenticationFilter implements Filter {
-
-    @Override
+/**
+ *
+ * @author 694952
+ */
+public class AdminFilter implements Filter {
+    
+   @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         
         HttpServletRequest httpRequest = (HttpServletRequest)request;
         HttpSession session = httpRequest.getSession();
         String email = (String)session.getAttribute("email");
+        User user = new User();
+        UserDB getUser = new UserDB();
+        user = getUser.get(email);
         
-        if(email == null){
+        
+        if(user.getRole().getRoleId() == 2){
             HttpServletResponse httpResponse = (HttpServletResponse)response;
-            httpResponse.sendRedirect("login");
+            httpResponse.sendRedirect("notes");
             return;
         }
         
